@@ -1,0 +1,12 @@
+{
+  "name": "kue",
+  "homepage": "https://github.com/Automattic/kue",
+  "main": "index.d.ts",
+  "version": "^0.11.0",
+  "dependencies": {
+    "redis": "registry:npm/redis#0.12.1+20160502170935"
+  },
+  "globalDependencies": {
+    "node": "registry:env/node#4.0.0+20160507210304"
+  }
+}
