@@ -13,18 +13,11 @@ export interface JobContext {
   resume (): void;
 }
 
-export interface JobHandler <T> {
-  (job: Job<T>, done: (err: Error, result: any) => void): any;
-  (job: Job<T>, ctx: JobContext, done: (err: Error, result: any) => void): any;
-}
-
-export interface CountHandler {
-  (err: Error | void, total: number): any;
-}
-
-export interface StateHandler {
-  (err: Error | void, ids: number[]): any;
-}
+export type JobHandler <T> = (job: Job<T>, done: (err: Error | void, result: any) => void) => any;
+export type JobHandlerWithContext <T> = (job: Job<T>, ctx: JobContext, done: (err: Error | void, result: any) => void) => any;
+export type CountHandler = (err: Error | void, total: number) => any;
+export type StateHandler = (err: Error | void, ids: number[]) => any;
+export type RangeHandler = (err: Error | void, jobs: Array<Job<any>>) => any;
 
 export class Queue extends events.EventEmitter {
   name: string;
@@ -44,8 +37,8 @@ export class Queue extends events.EventEmitter {
   checkActiveJobTtl (ttlOptions?: { interval?: number, limit?: number }): void;
   watchStuckJobs (ms?: number): void;
   setting (name: string, fn: (err: Error | void, value: string) => any): this;
-  process <T> (type: string, handler: JobHandler<T>): void;
-  process <T> (type: string, concurrency: number, handler: JobHandler<T>): void;
+  process <T> (type: string, handler: JobHandler<T> | JobHandlerWithContext<T>): void;
+  process <T> (type: string, concurrency: number, handler: JobHandler<T> | JobHandlerWithContext<T>): void;
   shutdown (cb: (err?: Error) => any): this;
   shutdown (timeout: number, cb: (err?: Error) => any): this;
   shutdown (timeout: number, type: string, cb: (err?: Error) => any): this;
@@ -87,10 +80,6 @@ export interface Priorities {
 export interface BackoffOptions {
   delay?: number;
   type: 'fixed' | 'exponential';
-}
-
-export interface RangeHandler {
-  (err: Error | void, jobs: Array<Job<any>>): any;
 }
 
 export class Job <T> extends events.EventEmitter {
