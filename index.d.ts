@@ -1,4 +1,4 @@
-import redis = require('redis');
+import { RedisClient } from 'redis';
 import events = require('events');
 
 export interface TestMode {
@@ -32,7 +32,7 @@ export class Queue extends events.EventEmitter {
   promoter: any;
   workers: Array<Worker<any>>;
   shuttingDown: boolean;
-  client: redis.RedisClient;
+  client: RedisClient;
   testMode: TestMode;
 
   static singleton: Queue;
@@ -97,7 +97,7 @@ export class Job <T> extends events.EventEmitter {
   public id: number;
   public type: string;
   public data: T;
-  public client: redis.RedisClient;
+  public client: RedisClient;
 
   static priorities: Priorities;
   static disableSearch: boolean;
@@ -158,7 +158,7 @@ export class Job <T> extends events.EventEmitter {
 export class Worker <T> extends events.EventEmitter {
   queue: Queue;
   type: string;
-  client: redis.RedisClient;
+  client: RedisClient;
   job: Job<T>;
   running: boolean;
 
@@ -176,10 +176,10 @@ export class Worker <T> extends events.EventEmitter {
 
 interface Redis {
   configureFactory (options: Object, queue: Queue): void;
-  createClient (): redis.RedisClient;
-  createClientFactory (options: Object): redis.RedisClient;
-  client (): redis.RedisClient;
-  pubsubClient (): redis.RedisClient;
+  createClient (): RedisClient;
+  createClientFactory (options: Object): RedisClient;
+  client (): RedisClient;
+  pubsubClient (): RedisClient;
   reset (): void;
 }
 
@@ -206,7 +206,7 @@ export interface QueueOptions {
     db?: number;
     // See https://github.com/mranney/node_redis#rediscreateclient
     options?: any;
-    createClientFactory?: () => redis.RedisClient;
+    createClientFactory?: () => RedisClient;
   };
 }
 
