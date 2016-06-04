@@ -14,8 +14,8 @@ export interface JobContext {
 }
 
 export interface JobHandler <T> {
-  (job: Job<T>, done: (err: Error) => void): any;
-  (job: Job<T>, ctx: JobContext, done: (err: Error) => void): any;
+  (job: Job<T>, done: (err: Error, result: any) => void): any;
+  (job: Job<T>, ctx: JobContext, done: (err: Error, result: any) => void): any;
 }
 
 export interface CountHandler {
@@ -164,7 +164,7 @@ export class Worker <T> extends events.EventEmitter {
 
   constructor (queue: Queue, type: string);
   start (cb: JobHandler<T>): this;
-  error (err: Error, job: Job<T>): this;
+  error (err: string | Error, job: Job<T>): this;
   failed (job: Job<T>, theErr: Error, cb?: JobHandler<T>): this;
   process (job: Job<T>, cb: JobHandler<T>): this;
   idle (): this;
