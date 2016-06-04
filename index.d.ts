@@ -63,8 +63,14 @@ export class Queue extends events.EventEmitter {
   delayedCount (fn: CountHandler): this;
   delayedCount (type: string, fn: CountHandler): this;
 
-  on (event: 'job enqueue', listener: (id: string, type: string) => any): this;
   on (event: 'job complete', listener: (id: string, result: any) => any): this;
+  on (event: 'job failed attempt', listener: (id: string, errorMessage: any, doneAttempts: number) => any): this;
+  on (event: 'job failed', listener: (id: string, errorMessage: any) => any): this;
+  on (event: 'job progress', listener: (id: string, progress: number, data: any) => any): this;
+  on (event: 'job remove', listener: (id: string, type: string) => any): this;
+  on (event: 'job promotion', listener: (id: string) => any): this;
+  on (event: 'job start', listener: (id: string) => any): this;
+  on (event: 'job enqueue', listener: (id: string, type: string) => any): this;
   on (event: 'error', listener: (err: Error) => any): this;
   on (event: string, listener: Function): this;
 }
@@ -137,10 +143,10 @@ export class Job <T> extends events.EventEmitter {
   on (event: 'failed attempt', listener: (errorMessage: any, doneAttempts: number) => any): this;
   on (event: 'failed', listener: (errorMessage: any) => any): this;
   on (event: 'progress', listener: (progress: number, data: any) => any): this;
-  on (event: 'remove', listener: () => any): this;
+  on (event: 'remove', listener: (type: string) => any): this;
   on (event: 'promotion', listener: () => any): this;
   on (event: 'start', listener: () => any): this;
-  on (event: 'enqueue', listener: () => any): this;
+  on (event: 'enqueue', listener: (type: string) => any): this;
   on (event: string, listener: (...args: any[]) => any): this;
 }
 
