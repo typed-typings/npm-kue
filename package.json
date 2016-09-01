@@ -1,5 +1,7 @@
 {
-  "private": true,
+  "name": "@types/kue",
+  "version": "0.11.0",
+  "description": "Types for https://github.com/Automattic/kue",
   "scripts": {
     "lint": "tslint index.d.ts",
     "bundle": "typings bundle . -o bundle.d.ts",
