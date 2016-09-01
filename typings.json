@@ -3,7 +3,7 @@
   "homepage": "https://github.com/Automattic/kue",
   "main": "index.d.ts",
   "version": "^0.11.0",
-  "dependencies": {
+  "peerDependencies": {
     "redis": "registry:npm/redis#0.12.1+20160502170935"
   },
   "globalDependencies": {
